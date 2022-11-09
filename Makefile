@@ -19,11 +19,11 @@ gdb:
 
 
 run:
-	@qemu-system-x86_64 -drive file=dist/bootloader.bin,format=raw,index=0,media=disk
+	@qemu-system-x86_64 -drive file=dist/bootloader.bin,format=raw,index=0,media=disk -nographic
 
 
 run_debug:
-	@qemu-system-x86_64 -drive file=dist/bootloader.bin,format=raw,index=0,media=disk -s -S
+	@qemu-system-x86_64 -drive file=dist/bootloader.bin,format=raw,index=0,media=disk -s -S -nographic
 
 
 build: pre_build compile_trampoline compile_c link
@@ -48,13 +48,13 @@ compile_c: $(TARGETS)
 
 $(TARGETS):
 	@echo Compiling $@.c
-	@gcc -ffreestanding -g -c src/$@.c -o dist/$@.o -O0
+	@gcc -fno-pie -m16 -ffreestanding -g -c src/$@.c -o dist/$@.o -O0
 	
 
 compile_trampoline:
 	@if [[ -e dist ]]; then echo "./dist exists"; else echo "Creating ./dist" && mkdir dist; fi
 	@echo "Compiling trampoline.asm"
-	@nasm -f elf64 -F dwarf -g trampoline.asm -o dist/trampoline.o
+	@nasm -f elf -F dwarf -g trampoline.asm -o dist/trampoline.o
 
 
 link:

@@ -5,29 +5,29 @@ extern start_bootloader
 section .init
 
 _init:
-    push rbp
-    mov rbp, rsp
+    push bp
+    mov bp, sp
     call start_bootloader
-    pop rbp
+    pop bp
 
 section .text
 
 print_char:
-    push rbp
-    mov rbp, rsp
+    push bp
+    mov bp, sp
     mov ah, 0x0e
     mov eax, edi
     int 0x10
-    pop rbp
+    pop bp
     ret
 
 test_fn:
-    push rbp
-    mov rbp, rsp
+    push bp
+    mov bp, sp
     mov ah, 0x0e
     mov al, 'x'
     int 0x10
-    pop rbp
+    pop bp
     ret
 
 
